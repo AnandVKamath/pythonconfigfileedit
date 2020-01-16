@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>3DS Config Server Config-File Editor </title>
+</head>
+<body bgcolor="#BBCC99" >
+<h4 align="center">Config Server File Updater</h4>
+  <table cellpadding = "5" cellspacing = "5">
+    <tr>
+       <form action="add">
+           <td >&ensp;Config Key </td>
+           <td ><input type="text" size="35" name="avar"></td>
+           <td >&ensp; Value </td>
+           <td ><input type="text" size="35" name="aval"></td>
+           <td > <input type="submit" value="Add Key"></td>
+       </form>
+    </tr>
+  </table>
+
+  <table cellpadding = "5" cellspacing = "5">
+    <tr>
+       <form action="update">
+           <td >&ensp;Config Key </td>
+           <td ><input type="text" size="35" name="uvar"></td>
+           <td >&ensp; Value </td>
+           <td ><input type="text" size="35" name="uval"></td>
+           <td > <input type="submit"  value="Update Key"></td>
+       </form>
+    </tr>
+  </table>
+
+  <table cellpadding = "5" cellspacing = "5">
+    <tr>
+       <form action="delete">
+           <td >&ensp;Config Key </td>
+           <td > <input type="text" size="35" name="uvar"></td>
+           <td > <input type="submit"  value="Delete Config Value"></td>
+       </form>
+    </tr>
+  </table>
+
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+  <table cellpadding = "5" cellspacing = "5">
+     <tr>
+        <form action="upload3ds">
+            <td>&ensp;<input type="submit" value="Upload Config to 3DS"></td>
+        </form>
+        <form action="uploadprep">
+            <td>&ensp;<input type="submit" value="Upload Config to Preparatory"></td>
+        </form>
+        <form action="deploy">
+            <td>&ensp;<input type="submit" value="Deploy Interface"></td>
+        </form>
+     </tr>
+  </table>
+<br>
+
+</body>
+</html>
