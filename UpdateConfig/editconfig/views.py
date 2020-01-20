@@ -2,9 +2,6 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
 
-def home(request):
-    return render(request, 'home.html')
-
 def update(request):
     config_var = request.GET['uvar']
     config_val = request.GET['uval']
@@ -28,7 +25,6 @@ def update(request):
     file.close()
     messages.success(request, 'Updated key to config file successfully!')
     return redirect('http://192.168.1.104:7001/')
-
 
 def add(request):
     config_var = request.GET['avar']
@@ -59,16 +55,48 @@ def delete(request):
     messages.success(request, 'Deleted Key values from config file successfully!')
     return redirect('http://192.168.1.104:7001/')
 
+def home(request):
+    import  mysql.connector
+
+    my_db = mysql.connector.connect(host="192.168.1.74", user="root", password="password", database="deploy")
+    mycursor = my_db.cursor()
+    select_data = "select * from deploy.deploy_serverlist order by id desc limit 1"
+    mycursor.execute(select_data)
+    records = mycursor.fetchall()
+    for row in records:
+        env = (row[1])
+    print(env)
+    return render(request, 'home.html')
+
+def setdata(request):
+    import mysql.connector
+    filename = request.GET.get('filename')
+    print(filename)
+    my_db = mysql.connector.connect(host="192.168.1.74", user="root", password="password", database="deploy")
+    mycursor = my_db.cursor()
+    insert_data = "insert into deploy_serverlist (env_file) value ( %s ) "
+    recordTuple = (filename,)
+    mycursor.execute(insert_data, recordTuple)
+    my_db.commit()
+    return redirect('http://192.168.1.104:7001/')
 
 
 def upload3ds(request):
-    import paramiko, os, mysql.connector
-    from dotenv import load_dotenv
-    dotenv_path = '/home/anand/Documents/Scripts/Python/.envssh'
-    load_dotenv(dotenv_path)
-    hostip = os.getenv('HOSTIP_3DS')
-    user = os.getenv('USERSSH')
-    password = os.getenv('PASSWORD')
+    import paramiko, mysql.connector
+    from configparser import ConfigParser
+    configur = ConfigParser()
+    configur.read('/home/anand/ENV/config.ini')
+    my_db = mysql.connector.connect(host="192.168.1.74", user="root", password="password", database="deploy")
+    mycursor = my_db.cursor()
+    select_data = "select * from deploy.deploy_serverlist order by id desc limit 1"
+    mycursor.execute(select_data)
+    records = mycursor.fetchall()
+    for row in records:
+        envs = (row[1])
+    print(envs)
+    hostip = configur.get(envs,'HOSTIP_3DS')
+    user = configur.get(envs, 'USERSSH')
+    password = configur.get(envs, 'PASSWORD')
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(hostip, port=22, username=user, password=password)
@@ -80,14 +108,23 @@ def upload3ds(request):
     sftp.close()
     return redirect('http://192.168.1.104:7001/')
 
+
 def uploadprep(request):
-    import paramiko, os, mysql.connector
-    from dotenv import load_dotenv
-    dotenv_path = '/home/anand/Documents/Scripts/Python/.envssh'
-    load_dotenv(dotenv_path)
-    hostip = os.getenv('HOSTIP_PREPARATORY')
-    user = os.getenv('USERSSH')
-    password = os.getenv('PASSWORD')
+    import paramiko, mysql.connector
+    from configparser import ConfigParser
+    configur = ConfigParser()
+    configur.read('/home/anand/ENV/config.ini')
+    my_db = mysql.connector.connect(host="192.168.1.74", user="root", password="password", database="deploy")
+    mycursor = my_db.cursor()
+    select_data = "select * from deploy.deploy_serverlist order by id desc limit 1"
+    mycursor.execute(select_data)
+    records = mycursor.fetchall()
+    for row in records:
+        envs = (row[1])
+    print(envs)
+    hostip = configur.get(envs,'HOSTIP_PREPARATORY')
+    user = configur.get(envs, 'USERSSH')
+    password = configur.get(envs, 'PASSWORD')
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(hostip, port=22, username=user, password=password)
@@ -101,3 +138,5 @@ def uploadprep(request):
 
 def deploy(request):
     return redirect('http://192.168.1.104:7000/')
+
+

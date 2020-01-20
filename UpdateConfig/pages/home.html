@@ -17,7 +17,6 @@
        </form>
     </tr>
   </table>
-
   <table cellpadding = "5" cellspacing = "5">
     <tr>
        <form action="update">
@@ -29,7 +28,6 @@
        </form>
     </tr>
   </table>
-
   <table cellpadding = "5" cellspacing = "5">
     <tr>
        <form action="delete">
@@ -39,7 +37,6 @@
        </form>
     </tr>
   </table>
-
         {% if messages %}
         <ul class="messages">
             {% for message in messages %}
@@ -47,7 +44,6 @@
             {% endfor %}
         </ul>
         {% endif %}
-
   <table cellpadding = "5" cellspacing = "5">
      <tr>
         <form action="upload3ds">
@@ -62,6 +58,12 @@
      </tr>
   </table>
 <br>
-
+		        <form action="setdata">
+                                <select name="filename">
+                                    <option value="aws"> AWS</option>
+                                    <option value="local">Local</option>
+                                </select>
+                                <input type="submit" value="Select">
+		        </form>
 </body>
 </html>

@@ -20,10 +20,12 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('home', views.home, name='home'),
     path('update', views.update, name='clone'),
     path('add', views.add, name='add'),
     path('upload3ds', views.upload3ds, name='upload3ds'),
     path('uploadprep', views.uploadprep, name='uploadprep'),
     path('delete', views.delete, name='delete'),
     path('deploy', views.deploy, name='deploy'),
+    path('setdata', views.setdata, name='setdata')
 ]
